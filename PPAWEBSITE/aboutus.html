@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>About Us</title>
+        <link href="https://fonts:googleapis.com/css?family=Bitter" rel="stylesheet">
+        <link rel="stylesheet" href="about.css">
+        <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/bootstrap.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/82fb063a14.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="header">
+            <div class="main">
+                <h1>About Us..</h1>
+                <p>
+                    The Colombo Museum as it was called at the beginning was established on 1st January 1877. 
+                    It founder was Sir William Henry Gregory, the British Governor of Ceylon (Sri Lanka) at the 
+                    time. Our Vision As an illustrious nation, the preservation of the cultural and natural 
+                    heritage inherited from the past, and its presentation in a more fruitful fashion for future 
+                    generations in a manner that successfully addresses the challenges of globalization. Our 
+                    Mission is the protection of cultural and natural heritage resources scientifically and 
+                    systematically and their presentation for the evaluation, education and entertainment of 
+                    the public.<span id="dots">...</span><span id="more">Our key functions are Collection of 
+                    objects, Documentation, Conservation, Exhibition and Education.The National 
+                    Museum of Natural History is a museum that covers the natural heritage of Sri Lanka.
+                    Museums in Sri lanka are Colombo National Museum, National Museum of Natural History, 
+                    Galle National Museum, Rathnapura National Museum, Kandy National Museum, Anuradhapura 
+                    Folk Museum, Dutch Museum, National Maritime Museum, Independence Memorial Museum, 
+                    Brahmachari Wallisinghe Harischandra Memorial Museum</span>
+                </p>
+                <br>
+                <button type="button" id="read" onclick="read()">Read more</button>
+                <script type="text/javascript">
+                    var i=0;
+                    function read(){
+                        if(!i){
+                            document.getElementById("more").style.display = "inline";
+                            document.getElementById("dots").style.display = "none";
+                            document.getElementById("read").innerHTML="Read less";
+                            i=1;
+                        }
+                        else{
+                            document.getElementById("more").style.display = "none";
+                            document.getElementById("dots").style.display = "inline";
+                            document.getElementById("read").innerHTML="Read more";
+                            i=0;
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </body>
+</html>

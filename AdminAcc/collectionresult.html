@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>results</title>
+    </head>
+    <body>
+        <br><br><br>
+                    <div class="text=center bg-light text-dark">
+                        <h1><center>All Collections</h1></center>
+                    </div>
+                    <hr>
+                    <br>
+
+                    <div class="row container-fluid bg-3">
+                        <div class="col-sn-12" id="blogs">
+
+                        </div>
+                        <script src="js/collec.js"></script>
+                        <Script>
+                            firebase.auth().onAuthStateChanged(function(user)
+                            {
+                                if(user)
+                                {
+                                    window.location.href = "collections.html";
+                                }
+                            });
+
+                       
+                    </script>
+                    </div>
+                    <br>
+    </body>
+</div>
+</html>

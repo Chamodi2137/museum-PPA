@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Collections</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-storage.js"></script>
+
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Roboto');
+
+            body{
+                font-family: 'Roboto', sans-serif;
+                width: 100%;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+               
+            }
+
+         
+            /*----------multi-level-accordian-menu------------*/
+            .navbar-logo{
+                padding: 20px;
+                color: #fff;
+            }
+            .navbar-mainbg{
+                background-color: black;
+                padding: 0px;
+            }
+
+            .navbar-brand 
+            {
+                padding-left: 20%;
+                font-family: sans-serif;
+                font-weight: bold;
+                font-size: 30px;
+            }
+
+
+            #navbarSupportedContent{
+                overflow: hidden;
+                position: relative;
+            }
+            #navbarSupportedContent ul{
+                padding: 0px;
+                margin: 0px;
+            }
+            #navbarSupportedContent ul li a i{
+                margin-right: 3px;
+            }
+            #navbarSupportedContent li {
+                list-style-type: none;
+                float: left;
+            }
+            #navbarSupportedContent ul li a{
+                color:blanchedalmond;
+                text-decoration: none;
+                font-size: 15px;
+                display: block;
+                padding: 20px 20px;
+                transition-duration:0.6s;
+                transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                position: relative;
+            }
+            #navbarSupportedContent>ul>li.active>a{
+                color: crimson;
+                background-color: transparent;
+                transition: all 0.7s;
+            }
+            #navbarSupportedContent a:not(:only-child):after {
+                content: "\f105";
+                position: absolute;
+                right: 20px;
+                top: 10px;
+                font-size: 14px;
+                font-family: "Font Awesome 5 Free";
+                display: inline-block;
+                padding-right: 3px;
+                vertical-align: middle;
+                font-weight: 900;
+                transition: 0.5s;
+            }
+            #navbarSupportedContent .active>a:not(:only-child):after {
+                transform: rotate(90deg);
+            }
+            .hori-selector{
+                display:inline-block;
+                position:absolute;
+                height: 100%;
+                top: 0px;
+                left: 0px;
+                transition-duration:0.6s;
+                transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                background-color: #fff;
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+                margin-top: 10px;
+            }
+            .hori-selector .right,
+            .hori-selector .left{
+                position: absolute;
+                width: 25px;
+                height: 25px;
+                background-color: #fff;
+                bottom: 10px;
+            }
+            .hori-selector .right{
+                right: -25px;
+            }
+            .hori-selector .left{
+                left: -25px;
+            }
+            .hori-selector .right:before,
+            .hori-selector .left:before{
+                content: '';
+                position: absolute;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: crimson;
+            }
+            .hori-selector .right:before{
+                bottom: 0;
+                right: -25px;
+            }
+            .hori-selector .left:before{
+                bottom: 0;
+                left: -25px;
+            }
+
+
+
+
+            @media (max-width: 100%){
+                #navbarSupportedContent ul li a{
+                    padding: 12px 30px;
+                }
+                .hori-selector{
+                    margin-top: 0px;
+                    margin-left: 10px;
+                    border-radius: 0;
+                    border-top-left-radius: 25px;
+                    border-bottom-left-radius: 25px;
+                }
+                .hori-selector .left,
+                .hori-selector .right{
+                    right: 10px;
+                }
+                .hori-selector .left{
+                    top: -25px;
+                    left: auto;
+                }
+                .hori-selector .right{
+                    bottom: -25px;
+                }
+                .hori-selector .left:before{
+                    left: -25px;
+                    top: -25px;
+                }
+                .hori-selector .right:before{
+                    bottom: -25px;
+                    left: -25px;
+                }
+            }
+
+            .dropdown{
+                
+                background-color: black;
+                width: 30%;
+            }
+            .dropdown-menu{
+                background-color: black;
+                color: white;
+                min-width: 10%;
+                
+            }
+            .dropdown-item{
+                background-color: black;
+                color: white; 
+            }
+
+
+            .row {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 4px;
+            }
+
+            /* Create four equal columns that sits next to each other */
+            .column {
+            flex: 25%;
+            max-width: 25%;
+            padding: 0 4px;
+            }
+
+            .column img {
+            margin-top: 8px;
+            vertical-align: middle;
+            width: 100%;
+            }
+
+            /* Responsive layout - makes a two column-layout instead of four columns */
+            @media screen and (max-width: 800px) {
+            .column {
+                flex: 50%;
+                max-width: 50%;
+            }
+            }
+
+            /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+            @media screen and (max-width: 600px) {
+            .column {
+                flex: 100%;
+                max-width: 100%;
+            }
+            }
+        </style>
+
+
+    </head>
+    
+    <body>
+
+        <!---Navigation bar ---->
+
+        <nav class="navbar navbar-expand-lg navbar-mainbg" style="width: 100%;">
+            <a class="navbar-brand navbar-logo" href="#"> Create your Blogs in Here</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars text-white"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);"><i class="fas fa-tachometer-alt"></i>Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="javascript:void(0);"><i class="far fa-address-book"></i>Locations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);"><i class="far fa-clone"></i>Collections</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Exhibitions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0);"><i class="far fa-chart-bar"></i>Souvenirs</a>
+                    </li>
+                </ul>
+        </div>
+
+           
+            <div class="dropdown">
+                <button id="option-id" class="dropdown-toggle text-white bg-dark" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Options
+                </button>
+
+                <div class="dropdown-menu" aria-labelledby="option-id">
+                    
+                        <a class="dropdown-item" id="btn-logout" href="#">
+                            Signout
+                        </a>
+                        <a class="dropdown-item" id="btn-login" href="signin.html">
+                            SignIn
+                        </a>
+                        <a class="dropdown-item" id="btn-sign-up" href="signup.html">
+                            SignUp
+                        </a> 
+                </div>
+            </div>
+    </nav>
+
+        <!---Navigation bar End here---->
+
+
+
+        <div class="row h-100 bg-light">
+            <div class="col-lg-0 bg-secondary">
+                <ul class="nav flex-column">
+
+                </ul>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="container" id="container">
+
+
+                    <!--------------blog post Area------------------------------------------------->
+
+
+                    <div class="jumbotron bg-dark" style="margin-top: 15px; ">
+                        <script>
+                            var counter = 0;
+                        </script>
+                            <div class="container text-center">
+                            <form id="main-form">
+                                <div class="form-group">
+                                    <textarea type="text" rows="2" placeholder="Collection Name" class="form-control" id="Colle-name"></textarea>
+                                    <div class="invalid-feedback">Please write the collection name first.</div>
+                                </div>
+                                <div class="form-group">
+                                    <textarea type="text" rows="6" placeholder="Description..." class="form-control" id="main-desc"></textarea>
+                                    <div class="invalid-feedback">Please write some description first.</div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="file" class="form-control" id="main-image"/>
+                                    
+                                        <div class="invalid-feedback">
+                                            Please choose a valid picture.
+                                        </div>
+                                </div>
+
+                                <div id="Image-Grid">
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image1"/>
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image2"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image3"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image4"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image5"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image6"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image7"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image8"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image9"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image10"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image11"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image12"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image13"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image14"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image15"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image16"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image17"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image18"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image19"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" class="form-control" id="image20"/>
+                                        
+                                            <div class="invalid-feedback">
+                                                Please choose a valid picture.
+                                            </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <img id="selected-image-main" width="200px" height="135px" src="#"/>
+                                </div>
+                               
+                                <div class="form-group">
+                                    <div class="progress bg-secondary">
+                                        <div class="progress-bar bg-success" id="upload-progress" style="width: 0%;">0%</div>
+                                        </div>
+                                    </div>
+                                <div class="form-group">
+                                    <button id="save-blog" type="button" style="width: 150px; height: 60px;" class="btn btn-light bg-light text-dark">post</button>
+                                </div>
+                            </form>
+
+                            <div id="result">
+
+                            </div>
+                        </div>
+                    </div>
+                    <!----------------------Blog post Area Ends here-------------------------------------->
+
+                    <!----------------------After blog post area------------------------------------------>
+                    <hr>
+                    <br><br><br>
+
+                    <div class="text-center bg-light text-dark">
+                        <h3>All Collections</h3>
+                    </div>
+
+                    <hr>
+                    <br>
+
+                    <div class="row container-fluid bg-3">
+                        <div class="col-sm-12" id="blogs">
+
+                        </div>
+                    </div>
+
+                    <br>
+
+
+                    <!----------------------After blog post area end here--------------------------------->
+
+
+
+
+                    <!------------Navigation bar JS Starts------------------->
+                  
+                    <script>
+                    function test(){
+                    var tabsNewAnim = $('#navbarSupportedContent');
+                    var selectorNewAnim = $('#navbarSupportedContent').find('li').length;
+                    var activeItemNewAnim = tabsNewAnim.find('.active');
+                    var activeWidthNewAnimHeight = activeItemNewAnim.innerHeight();
+                    var activeWidthNewAnimWidth = activeItemNewAnim.innerWidth();
+                    var itemPosNewAnimTop = activeItemNewAnim.position();
+                    var itemPosNewAnimLeft = activeItemNewAnim.position();
+                    $(".hori-selector").css({
+                        "top":itemPosNewAnimTop.top + "px", 
+                        "left":itemPosNewAnimLeft.left + "px",
+                        "height": activeWidthNewAnimHeight + "px",
+                        "width": activeWidthNewAnimWidth + "px"
+                    });
+                    $("#navbarSupportedContent").on("click","li",function(e){
+                        $('#navbarSupportedContent ul li').removeClass("active");
+                        $(this).addClass('active');
+                        var activeWidthNewAnimHeight = $(this).innerHeight();
+                        var activeWidthNewAnimWidth = $(this).innerWidth();
+                        var itemPosNewAnimTop = $(this).position();
+                        var itemPosNewAnimLeft = $(this).position();
+                        $(".hori-selector").css({
+                        "top":itemPosNewAnimTop.top + "px", 
+                        "left":itemPosNewAnimLeft.left + "px",
+                        "height": activeWidthNewAnimHeight + "px",
+                        "width": activeWidthNewAnimWidth + "px"
+                        });
+                    });
+                    }
+                    $(document).ready(function(){
+                    setTimeout(function(){ test(); });
+                    });
+                    $(window).on('resize', function(){
+                    setTimeout(function(){ test(); }, 500);
+                    });
+                    $(".navbar-toggler").click(function(){
+                    setTimeout(function(){ test(); });
+                    });
+                    </script>
+
+                    <!------------Navigation bar JS Ends------------------->
+
+                    <!----------------------validation and uploading of post blogs------------------------------>
+                    <script>
+                        var validImagetypes = ["image/gif", "image/jpeg", "image/png"];
+
+                        $("#selected-image-main").hide();
+
+                        function previewImage(image_blog)
+                        {
+                            if(image_blog.files && image_blog.files[0])
+                            {
+                                var reader = new FileReader();
+
+                                reader.onload = function(e)
+                                {
+                                    $("#selected-image").attr('src', e.target.result);
+                                    $("#selected-image").fadeIn();
+                                }
+                                reader.readAsDataURL(image_blog.files[0]);
+
+                            }
+                        }
+
+                        $("#main-image").change(function()
+                        {
+                            previewImage(this);
+                        });
+
+                        $("#save-blog").click(function()
+                        {
+                            $("#Colle-name").removeClass("is-invalid");
+                            $("#main-desc").removeClass("is-invalid");
+                            $("#image1").removeClass("is-invalid");
+                            $("#image2").removeClass("is-invalid");
+                            $("#image3").removeClass("is-invalid");
+                            $("#image4").removeClass("is-invalid");
+                            $("#image5").removeClass("is-invalid");
+                            $("#image6").removeClass("is-invalid");
+                            $("#image7").removeClass("is-invalid");
+                            $("#image8").removeClass("is-invalid");
+                            $("#image9").removeClass("is-invalid");
+                            $("#image10").removeClass("is-invalid");
+                            $("#image11").removeClass("is-invalid");
+                            $("#image12").removeClass("is-invalid");
+                            $("#image13").removeClass("is-invalid");
+                            $("#image14").removeClass("is-invalid");
+                            $("#image15").removeClass("is-invalid");
+                            $("#image16").removeClass("is-invalid");
+                            $("#image17").removeClass("is-invalid");
+                            $("#image18").removeClass("is-invalid");
+                            $("#image19").removeClass("is-invalid");
+                            $("#image20").removeClass("is-invalid");
+                           
+                            var ColleName = $("#Colle-name").val();
+                            var image1 = $("#image1").val();
+                            var image2 = $("#image1").val();
+                            var image3 = $("#image1").val();
+                            var image4= $("#image1").val();
+                            var image5 = $("#image1").val();
+                            var image6 = $("#image1").val();
+                            var image7 = $("#image1").val();
+                            var image8 = $("#image1").val();
+                            var image9 = $("#image1").val();
+                            var image10 = $("#image1").val();
+                            var image11 = $("#image1").val();
+                            var image1 = $("#image1").val();
+                            var image12 = $("#image1").val();
+                            var image13 = $("#image1").val();
+                            var image14= $("#image1").val();
+                            var image15 = $("#image1").val();
+                            var image16 = $("#image1").val();
+                            var image17 = $("#image1").val();
+                            var image18 = $("#image1").val();
+                            var image19 = $("#image1").val();
+                            var image20 = $("#image1").val();
+                            var desc = $("#main-desc").val();
+                            var picture = $("#main-image").prop("files")[0];
+
+                            if(!ColleName)
+                            {
+                                $("#Colle-name").addClass("is-invalid");
+                                return; 
+                            }
+
+                            if(!desc)
+                            {
+                                $("#main-desc").addClass("is-invalid");
+                                return; 
+                            }
+
+                            if(picture == null)
+                            {
+                                $("#main-image").addClass("is-invalid");
+                                return;
+                            }
+
+                            if($.inArray(picture["type"], validImagetypes)<0)
+                            {
+                                $("#main-image").addClass("is-invalid");
+                                return;
+                            }
+
+                            //********************upload and save to firebase storage and firebase**************************//
+                            var databaseRef = firebase.database().ref().child("Collections");
+
+                            databaseRef.once("value").then(function(snapshot)
+                            {
+                                var name = picture["name"];
+                                var dateStr = new Date().getTime();
+                                var fileCompleteName = name + "_" + dateStr;
+
+                                var storageRef = firebase.storage().ref("Collection Images");
+                                var blogStorageRef = storageRef.child(fileCompleteName);
+
+                                var uploadTask = blogStorageRef.put(picture);
+
+                                uploadTask.on("state_changed",
+
+                                    function progress(snapshot)
+                                    {
+                                        var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+                                        $("#upload-progress").html(Math.round(percentage) + "%");
+                                        $("#upload-progress").attr("style", "width:" + percentage + "%");                                    
+                                    },
+                                    function error(err)
+                                    {
+
+                                    },
+                                    function complete()
+                                    {
+                                        var user = firebase.auth().currentUser;
+                                        var userName;
+                                        firebase.database().ref('Users/' + user.uid).once('value').then(function(snapshot)
+                                        {
+                                            var FirstName = (snapshot.val() && snapshot.val().FirstName);
+                                            var LastName = (snapshot.val() && snapshot.val().LastName);
+
+
+                                            userName = FirstName + " " + LastName;
+                                        });
+
+                                        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadUrl)
+                                        {
+                                            var time = new Date();
+
+                                            var options =
+                                            {
+                                                weekday: "long",
+                                                month: "long",
+                                                day: "2-digit",
+                                                year: "numeric",
+                                            };
+
+                                            var blogData =
+                                            {
+                                                "image": downloadUrl,
+                                                "image1": image1,
+                                                "image2": image2,
+                                                "image3": image3,
+                                                "image4": image4,
+                                                "image5": image5,
+                                                "image6": image6,
+                                                "image7": image7,
+                                                "image8": image8,
+                                                "image9": image9,
+                                                "image10": image10,
+                                                "image11": image11,
+                                                "image12": image12,
+                                                "image13": image13,
+                                                "image14": image14,
+                                                "image15": image15,
+                                                "image16": image16,
+                                                "image17": image17,
+                                                "image18": image18,
+                                                "image19": image19,
+                                                "image20": image20,
+
+                                                "name": fileCompleteName,
+                                                "desc": desc,
+                                                "ColleName":ColleName,
+                                                "uid": user.uid, 
+                                                "counter": 5000 - counter,
+                                                "userName": userName,
+                                                "time": time.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}),
+                                                "date": time.toLocaleDateString('en-US', options),                                          
+                                            };
+
+                                            var newPostRef = databaseRef.push();
+
+                                            newPostRef.set(blogData, function(err)
+                                            {
+                                                if(err)
+                                                {
+                                                    $("#result").attr("class", "alert alert-danger");
+                                                    $("#result").html(err.message);
+                                                }
+                                                else
+                                                {
+                                                    $("#result").attr("class", "alert alert-success");
+                                                    $("#result").html("Collection Name and Descriotion have been uploaded successfully.");
+
+                                                    window.open("", "_self");
+                                                }
+                                                resetform();
+                                            });
+                                        });
+                                    }
+
+                                );
+                            });
+
+                            //********************upload and save to firebase storage and firebase end here**************************//
+                        });
+
+
+                        function resetform()
+                        {
+                            $("#main-form")[0].reset();
+                            $("#selected-image").fadeOut();
+                            $("#upload-progress").html("Completed");
+                        }
+
+
+                        
+
+                        //************************Retrieve and display data from firebase*************************// 
+
+                          // Your web app's Firebase configuration
+                          var firebaseConfig = {
+                                apiKey: "AIzaSyA37f88Fs0LNlnLL1iuV-3oJNBhHdXpnm8",
+                                authDomain: "museum-web-app.firebaseapp.com",
+                                databaseURL: "https://museum-web-app.firebaseio.com",
+                                projectId: "museum-web-app",
+                                storageBucket: "museum-web-app.appspot.com",
+                                messagingSenderId: "195016800018",
+                                appId: "1:195016800018:web:f87b4c5e5d2b30d905e5cb",
+                                measurementId: "G-LKLRMQTK8G"
+                            };
+                            // Initialize Firebase
+                            firebase.initializeApp(firebaseConfig);
+                            firebase.auth.Auth.Persistence.LOCAL;
+
+
+                            var dbBlogs = firebase.database().ref().child("Collections").orderByChild("counter");
+
+                            dbBlogs.on("value", function(blogs)
+                            {
+                                if(blogs.exists())
+                                {
+                                    var blogHtml = "";
+
+                                    blogs.forEach(function(singleBlog)
+                                    {
+                                        counter = counter + 1;
+
+                                        
+                                        blogHtml += "<div style= 'text-align: center; color:black; font-weight: bold; font-size: 60px; font-family: sans-serif; '>";
+                                                                blogHtml += singleBlog.val().ColleName;
+                                                                blogHtml += "</div> <br>";
+                                        blogHtml += "<div style= 'text-align: justify; color:black; font-size: 20px; font-family: sans-serif; '>";
+                                                                blogHtml += singleBlog.val().desc;
+                                                                blogHtml += "</div> <br>";
+
+
+                                            blogHtml += "<p style='text-align: center;'> <img  width='85%' height='550px' src='";
+                                                blogHtml += singleBlog.val().image;
+                                                blogHtml += "'/></p> <br>";
+                                             
+                                                    blogHtml += "<div class='row'>";
+                                                        blogHtml += "<div class='column'>";
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image1;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image2;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image3;
+                                                            blogHtml += "' ";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image4;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+                                                        blogHtml +=  "</div>";
+
+                                                        blogHtml += "<div class='column'>";
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image5;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image6;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image7;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image8;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+                                                        blogHtml +=  "</div>";
+
+                                                        blogHtml += "<div class='column'>";
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image9;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image10;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image11;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image12;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+                                                        blogHtml +=  "</div>";
+
+                                                        blogHtml += "<div class='column'>";
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image13;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image14;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image15;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image16;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+                                                        blogHtml +=  "</div>";
+
+                                                        blogHtml += "<div class='column'>";
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image17;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image18;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image19;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+
+                                                            blogHtml += "<img  width='22%' height='50px' src='";
+                                                            blogHtml += singleBlog.val().image20;
+                                                            blogHtml += "'";
+                                                            blogHtml += "style= 'padding: 2px;'/>";
+                                                        blogHtml +=  "</div>";
+
+
+                                                    blogHtml += "</div>"; 
+
+                                                                
+                                    });
+                                    $("#blogs").html(blogHtml);
+                                }
+                            });
+                            //************************Retrieve and display data from firebase end here*************************// 
+
+                        
+                    </script>
+                    <!----------------validation and uploading of post blogs ends here--------------------------->
+                
+                </div>
+            </div>   
+        </div>
+
+        <script src="js/index.js"></script>
+        <script>
+        firebase.auth().onAuthStateChanged(function(user)
+        {
+            if(!user)
+            {
+                window.location.href = "signin.html";
+            }
+        });
+        </script>
+
+        
+    </body>
+</html>

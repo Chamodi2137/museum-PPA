@@ -1,0 +1,44 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Century Gothic;
+}
+.header{
+    height: 100vh;
+    width: 100%;
+    background: url("image1.jpg")no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.main{
+    width:50%;
+    background: rgba(0, 0, 0, .7);
+    color:#ffffff;
+    text-align: center;
+    line-height: 35px;
+    padding: 50px;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+#more{
+    display: none;
+
+}
+button{
+    padding: 10px 20px;
+    font-family: Century Gothic;
+    font-size: large;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    background: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+.btn:hover{
+    background: black;
+    color: #ffffff;
+}
